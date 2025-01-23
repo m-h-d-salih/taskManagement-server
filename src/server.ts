@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import errorHandler from './middlewares/errorHandling';
-import userRoutes from './routes/userRoutes'
+import userRoutes from './routes/userRoutes';
 
 const app = express();
 dotenv.config();

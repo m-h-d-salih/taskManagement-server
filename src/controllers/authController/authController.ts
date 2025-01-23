@@ -9,7 +9,7 @@ export const signup=async(req:Request,res:Response)=>{
     const {name,email,password}=req.body;
     const existuser=await User.findOne({email});
     if(existuser)
-        throw new AppError(`admin already exist`,400);
+        throw new AppError(`user already exist`,400);
     const hashedPassword = await hashPassword(password);
     const user=new User({
         name,
