@@ -23,23 +23,30 @@ export const addTask = async (req: Request, res: Response) => {
 
     res.status(201).json({
       message: "Task added successfully",
-      task: newTask,
+      data: newTask,
+      success:true
     });
   
 };
 export const getAllTask = async (req: Request, res: Response) => {
     const userId = req.params.id; 
-    const user=await User.findById(userId).populate('task')
+    const user=await User.findById(userId).populate({
+      path: 'task', 
+      match: { isDeleted: false }, 
+    })
     if (!user) {
       throw new AppError(`user does not exist`,404)
     }
    if(!user.task){
     throw new AppError(`no task found`,404)
    }
+   const tasks=user.task || [];
+   const totalCount=user.task.length;
 
     res.status(201).json({
-      message: "Task added successfully",
-      task: user.task,
+      message: "get all task successfully",
+      data: {tasks,totalCount},
+      success:true
     });
   
 };
@@ -68,8 +75,42 @@ export const updateAtask = async (req: Request, res: Response) => {
     throw new AppError(`Failed to update the task`, 500);
   }
     res.status(201).json({
-      message: "Task added successfully",
-      task: updatedTask,
+      message: "Task updated successfully",
+      data: updatedTask,
+      success:true
+    });
+  
+};
+export const deleteAtask = async (req: Request, res: Response) => {
+    const userId = req.params.userId; 
+    const taskId=req.params.taskId
+    const user=await User.findById(userId).populate({
+      path: 'task',
+      match: { isDeleted: false }, 
+    })
+    if (!user) {
+      throw new AppError(`user does not exist`,404)
+    }
+   if(!user.task){
+    throw new AppError(`no task found`,404)
+   }
+   const taskExists = user.task.some((task: any) => task._id.toString() === taskId);
+   if (!taskExists) {
+    throw new AppError(`Task not found for this user`, 404);
+  }
+  const updatedTask = await Task.findByIdAndUpdate(
+    taskId,
+    { isDeleted:true },
+    { new: true, runValidators: true } 
+  );
+
+  if (!updatedTask) {
+    throw new AppError(`Failed to delete the task`, 500);
+  }
+    res.status(201).json({
+      message: "Task deleted successfully",
+      data: updatedTask,
+      success:true
     });
   
 };
