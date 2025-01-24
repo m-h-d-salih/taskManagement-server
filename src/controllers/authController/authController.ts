@@ -26,6 +26,7 @@ export const signup=async(req:Request,res:Response)=>{
 
 
 export const login=async(req:Request,res:Response)=>{
+    console.log(`hii`)
         const {email,password}=req.body;
         const user=await User.findOne({email})
         if(!user)
