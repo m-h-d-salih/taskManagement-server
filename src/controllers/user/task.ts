@@ -6,7 +6,9 @@ import AppError from "../../middlewares/AppError";
 export const addTask = async (req: Request, res: Response) => {
     const userId = req.params.id; 
     const { title, description } = req.body;
-
+  if(!userId){
+    throw new AppError(`please provide user id`)
+  }
     const newTask = await Task.create({
       title,
       description,
@@ -30,6 +32,9 @@ export const addTask = async (req: Request, res: Response) => {
 };
 export const getAllTask = async (req: Request, res: Response) => {
     const userId = req.params.id; 
+    if(!userId){
+      throw new AppError(`please provide user id`)
+    }
     const user=await User.findById(userId).populate({
       path: 'task', 
       match: { isDeleted: false }, 
@@ -52,7 +57,13 @@ export const getAllTask = async (req: Request, res: Response) => {
 };
 export const updateAtask = async (req: Request, res: Response) => {
     const userId = req.params.userId; 
+    if(!userId){
+      throw new AppError(`please provide user id`)
+    }
     const taskId=req.params.taskId
+    if(!taskId){
+      throw new AppError(`please provide task id`)
+    }
     const { title, description, status } = req.body;
     const user=await User.findById(userId).populate('task')
     if (!user) {
@@ -84,6 +95,12 @@ export const updateAtask = async (req: Request, res: Response) => {
 export const deleteAtask = async (req: Request, res: Response) => {
     const userId = req.params.userId; 
     const taskId=req.params.taskId
+    if(!userId){
+      throw new AppError(`please provide user id`)
+    }
+    if(!taskId){
+      throw new AppError(`please provide task id`)
+    }
     const user=await User.findById(userId).populate({
       path: 'task',
       match: { isDeleted: false }, 

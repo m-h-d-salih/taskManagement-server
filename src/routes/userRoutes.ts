@@ -1,10 +1,10 @@
 import express from 'express';
 import { createValidator } from 'express-joi-validation'
 import { trycatch } from '../middlewares/tryCatch';
-import { login, signup } from '../controllers/authController/authController';
+import { login, signup } from '../controllers/auth/authController';
 import { loginValidation, regitserValidation } from '../middlewares/validation/auth';
 import { taskValidation } from '../middlewares/validation/taskValidation';
-import { addTask, deleteAtask, getAllTask, updateAtask } from '../controllers/userController/task';
+import { addTask, deleteAtask, getAllTask, updateAtask } from '../controllers/user/task';
 import checkAuth from '../middlewares/checkAuth';
 
 

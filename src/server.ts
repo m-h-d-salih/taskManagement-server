@@ -4,6 +4,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import errorHandler from './middlewares/errorHandling';
 import userRoutes from './routes/userRoutes';
+import adminRoutes from './routes/adminRoutes';
 
 const app = express();
 dotenv.config();
@@ -21,6 +22,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api',userRoutes)
+app.use('/api',adminRoutes)
 app.use(
   errorHandler as (
       err: any,
